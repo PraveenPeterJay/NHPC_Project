@@ -130,8 +130,8 @@ int main(int argc, char *argv[]) {
 
     double total_time = end_time - start_time;
     double message_size_bytes = data_vector_size * sizeof(double);
-    double total_data_exchanged = 2 * message_size_bytes * (log2(size));
-    double effective_bandwidth = total_data_exchanged / total_time;
+    // double total_data_exchanged = 2 * message_size_bytes * (log2(size));
+    // double effective_bandwidth = total_data_exchanged / total_time;
 
     // --- 4. Final Verification ---
     
@@ -151,8 +151,8 @@ int main(int argc, char *argv[]) {
         printf("Processes: %d\n", size);
         printf("Data vector size: %d doubles (%.2f KB)\n", data_vector_size, message_size_bytes / 1024.0);
         printf("Total time: %.6f sec\n", total_time);
-        printf("Effective bandwidth (approx.): %.3f MB/s\n", effective_bandwidth / (1024 * 1024));
-        printf("Configured latency: 50 us | Configured link BW: 125 MB/s\n");
+        // printf("Effective bandwidth (approx.): %.3f MB/s\n", effective_bandwidth / (1024 * 1024));
+        // printf("Configured latency: 50 us | Configured link BW: 125 MB/s\n");
         printf("===========================\n");
     }
 
