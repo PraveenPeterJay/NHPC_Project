@@ -4,7 +4,7 @@
 #include <math.h>
 
 /**
- * @brief Performs a two-step hierarchical Allreduce on a generalized grid (R x X).
+ * @brief Performs a two-step hierarchical Allreduce on a generalized grid (R x C).
  * The number of total processes (P) and columns (Pc) are read dynamically.
  * * Usage:
  * 	smpicc hierarchical_allreduce.c 
