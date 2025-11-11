@@ -185,8 +185,8 @@ int main(int argc, char *argv[]) {
         if (rank == ROOT) {
             // T(P, m) = X1*alpha + X2*beta + X3*gamma
             double X1 = 2.0 * (P - 1);
-            double X2 = 2.0 * (P - 1) * m;
-            double X3 = 1.0 * (P - 1) * m;
+            double X2 = 2.0 * (P - 1) * (m / P);
+            double X3 = 1.0 * (P - 1) * (m / P);
             
             // Print data point
             printf("%d,%d,%.9f,%.0f,%.0f,%.0f\n", P, m, avg_time, X1, X2, X3);
