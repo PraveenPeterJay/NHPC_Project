@@ -4,8 +4,8 @@
   <zone id="world" routing="Full">
     <cluster id="bob_cluster"
 	     prefix="node-" radical="0-1023" suffix=".simgrid.org"
-	     speed="1Gf" bw="125MBps" lat="100us"
+	     speed="1Gf" bw="64MBps" lat="1us"
              topology="FAT_TREE" topo_parameters="2;32,32;1,32;1,1"
-	     loopback_bw="100MBps" loopback_lat="0" />
+	     />
   </zone>
 </platform>

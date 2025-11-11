@@ -6,15 +6,15 @@
 #include <string.h> // For memcpy
 
 // --- WARMUP AND MEASUREMENT CONFIGURATION ---
-#define N_WARMUP 1
+#define N_WARMUP 0
 #define N_ITERATIONS 1
 #define MICRO_PAUSE_TICKS 0 
 // ------------------------------------------
 
 // --- NEW CONFIGURATION CONSTANTS ---
-#define NUM_TESTS 12           // Number of message sizes to test (at least ten)
-#define START_MESSAGE_SIZE 2048 // Start size in doubles
-#define SIZE_INCREMENT 512     // Increment size in doubles
+#define NUM_TESTS 100           
+#define START_MESSAGE_SIZE 8192 // Start size in doubles
+#define SIZE_INCREMENT 128     // Increment size in doubles
 // -----------------------------------
 
 /**
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
             
             total_time += (end_time - start_time);
             
-            busy_wait(MICRO_PAUSE_TICKS);
+            // busy_wait(MICRO_PAUSE_TICKS);
         }
 
         double avg_time = total_time / N_ITERATIONS;

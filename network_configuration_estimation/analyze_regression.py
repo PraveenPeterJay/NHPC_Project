@@ -127,4 +127,4 @@ def analyze_allreduce_performance(filename="all_data.csv"):
         
 if __name__ == "__main__":
     
-    analyze_allreduce_performance("linear_allreduce_data_points.csv")
+    analyze_allreduce_performance("points_for_viz.csv")

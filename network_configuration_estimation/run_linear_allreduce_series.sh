@@ -2,10 +2,10 @@
 
 # --- Configuration ---
 EXECUTABLE="./a.out"
-OUTPUT_FILE="linear_allreduce_data_points.csv"
+OUTPUT_FILE="points_for_viz.csv"
 
 # Array of process counts (P) to test (powers of two from 4 to 1024)
-PROCESS_COUNTS=(4 8 16 32 64 128 256 512 1024)
+PROCESS_COUNTS=1024 #(4 8 16 32 64 128 256 512 1024)
 # ---------------------
 
 echo "Starting Linear Allreduce scaling experiment across P = ${PROCESS_COUNTS[*]}..."
