@@ -14,7 +14,7 @@ NHPC_Project/
 │   ├── platform.xml                   
 │   ├── linear_allreduce.c             
 │   ├── run_linear_allreduce_series.sh        
-│   ├── generate_analyze_regression.py 
+│   ├── analyze_regression.py 
 │   ├── plot_m_vs_t.py           
 │   └── points_for_viz.csv            
 ├── platform.xml                       
