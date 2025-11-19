@@ -1,33 +1,81 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"macros.h"
-#include"utils/lin_rab.h"
-#include"utils/lin_rd.h"
-#include"utils/lin_rnos.h"
-#include"utils/lin_rs.h"
-#include"utils/rab_lin.h" 
-#include"utils/rab_rd.h"
-#include"utils/rab_rnos.h"
-#include"utils/rab_rs.h"
-#include"utils/rd_lin.h"
-#include"utils/rd_rab.h"
-#include"utils/rd_rnos.h"
-#include"utils/rd_rs.h"
-#include"utils/rnos_lin.h"
-#include"utils/rnos_rab.h"
-#include"utils/rnos_rd.h"
-#include"utils/rnos_rs.h"
-#include"utils/rs_lin.h"
-#include"utils/rs_rab.h"
-#include"utils/rs_rd.h"
-#include"utils/rs_rnos.h"
-
+#include"./utils/all_combos.h"
+#include<string.h>
 //#define LINEAR_ALL_REDUCE 0
 //#define RABENSEIFNER_ALL_REDUCE 1
 //#define RING_ALL_REDUCE 2
 //#define RING_SEG_ALL_REDUCE 3
 //#define RECURSIVE_DOUBLING_ALL_REDUCE 4
 
+
+#define MAX_FIELD 64
+
+
+getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];
+double alpha_beta_gamma[3][NUM_ALGOS+1];
+
+
+void my_init(char path[]){
+	//read alpha beta and gamma from a csv
+	FILE*fp = fopen(path, "r");
+	char line[256];
+    int i = 0;
+
+    // Skip header line
+    fgets(line, sizeof(line), fp);
+
+    while (fgets(line, sizeof(line), fp) && i < NUM_ALGOS) {
+        char algo[MAX_FIELD];
+        double a, b, c;
+
+        // Parse CSV line: algo,alpha,beta,gamma
+        if (sscanf(line, "%[^,],%lf,%lf,%lf", algo, &a, &b, &c) == 4) { //can put %63 if we want
+            alpha_beta_gamma[0][i] = a;
+            alpha_beta_gamma[1][i] = b;
+            alpha_beta_gamma[2][i] = c;
+
+            i++;
+        }
+    }
+
+    fclose(fp);
+
+
+	//assign all function pointers
+	func[0][0] = lin_lin;
+	func[0][1] = lin_rab;
+	func[0][2] = lin_rnos;
+	func[0][3] = lin_rs;
+	func[0][4] = lin_rd;	
+
+	func[1][0] = rab_lin;
+	func[1][1] = rab_rab;
+	func[1][2] = rab_rnos;
+	func[1][3] = rab_rs;
+	func[1][4] = rab_rd;	
+
+	func[2][0] = rnos_lin;
+	func[2][1] = rnos_rab;
+	func[2][2] = rnos_rnos;
+	func[2][3] = rnos_rs;
+	func[2][4] = rnos_rd;
+
+	func[3][0] = rs_lin;
+	func[3][1] = rs_rab;
+	func[3][2] = rs_rnos;
+	func[3][3] = rs_rs;
+	func[3][4] = rs_rd;
+
+	func[4][0] = rd_lin;
+	func[4][1] = rd_rab;
+	func[4][2] = rd_rnos;
+	func[4][3] = rd_rs;
+	func[4][4] = rd_rd;
+
+	printf("Init Done!\n");
+}
 
 
 double Stage1(ll P, ll m, ll ms, double alpha, double beta, double gamma, ll * ans){
@@ -43,36 +91,11 @@ double Stage1(ll P, ll m, ll ms, double alpha, double beta, double gamma, ll * a
 	//assume that ans already has space
 	//that is just a fallback
 	
-	getTimeandPc func[NUM_ALGOS][NUM_ALGOS];
-        func[0][0] = lin_rab;
-	func[0][1] = lin_rnos;
-	func[0][2] = lin_rs;
-	func[0][3] = lin_rd;	
 	
-	func[1][0] = rab_lin;
-	func[1][1] = rab_rnos;
-	func[1][2] = rab_rs;
-	func[1][3] = rab_rd;	
-	
-	func[2][0] = rnos_lin;
-	func[2][1] = rnos_rab;
-	func[2][2] = rnos_rs;
-	func[2][3] = rnos_rd;	
-	
-	func[3][0] = rs_lin;
-	func[3][1] = rs_rab;
-	func[3][2] = rs_rnos;
-	func[3][3] = rs_rd;	
-	
-	func[4][0] = rd_lin;
-	func[4][1] = rd_rab;
-	func[4][2] = rd_rnos;
-	func[4][3] = rd_rs;	
-
-	for(int i=0; i<NUM_ALGOS; i++){
-		for(int j=0; j<NUM_ALGOS; j++){
+	for(int i=0; i<NUM_ALGOS+1; i++){
+		for(int j=0; j<NUM_ALGOS+1; j++){
 			ll * pc_cand = malloc(1*sizeof(ll));
-			double time_taken = func[i][j](P, m, ms, alpha, beta, gamma, pc_cand);
+			double time_taken = func[i][j](P, m, ms, alpha_beta_gamma,pc_cand);
 			if(time_taken < min_time){
 				algorow_opt = i;
 				algocol_opt = j;
@@ -89,5 +112,7 @@ double Stage1(ll P, ll m, ll ms, double alpha, double beta, double gamma, ll * a
 
 
 
-
+int main(){
+	my_init("./data_store/sample.csv");
+}
  

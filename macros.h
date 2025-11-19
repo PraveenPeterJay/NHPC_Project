@@ -1,5 +1,5 @@
+#include<math.h>
 #pragma once
-
 
 #define LINEAR_ALL_REDUCE 0
 #define RABENSEIFNER_ALL_REDUCE 1
@@ -9,7 +9,7 @@
 
 #define NUM_ALGOS 5
 typedef long long ll;
-typedef double (*getTimeandPc)(ll, ll, ll, double, double, double, ll*);
+typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);
 //takes in P, m, alpha, beta, gamma
 //pointer to Pc to return it
 

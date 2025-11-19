@@ -6,8 +6,16 @@
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
 typedef long long ll;
 
-double rs_lin(long long P, long long m, long long ms, double alpha, double beta, double gamma, ll * Pc_ptr){
+double rs_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS+1], ll * Pc_ptr){
 	long long pow1 = 1;
+
+	double alpha_row = alpha_beta_gamma[0][RING_SEG_ALL_REDUCE];
+	double beta_row = alpha_beta_gamma[1][RING_SEG_ALL_REDUCE];
+	double gamma_row = alpha_beta_gamma[2][RING_SEG_ALL_REDUCE];
+	double alpha_column = alpha_beta_gamma[0][LINEAR_ALL_REDUCE];
+	double beta_column = alpha_beta_gamma[1][LINEAR_ALL_REDUCE];
+	double gamma_column =  alpha_beta_gamma[2][LINEAR_ALL_REDUCE];
+
 	while(pow1 <= P){
 		pow1 *= 2;
 	}	

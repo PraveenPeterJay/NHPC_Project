@@ -1,3 +1,3 @@
 #include"../macros.h"
 
-double hockeytime_rnos(ll P, ll m, ll ms, double alpha, double beta, double gamma);
+double hockneytime_rnos(ll P, ll m, ll ms, double alpha, double beta, double gamma);
