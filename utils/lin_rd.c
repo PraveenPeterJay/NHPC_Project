@@ -27,18 +27,17 @@ double lin_rd(long long P, long long m, long long ms, double alpha_beta_gamma[3]
 		//brute force check all pow1 combinations
 		for(int Pc_cand=1; Pc_cand < P; Pc_cand *= 2){
 			double t_cand = hockneytime_lin(Pc_cand, m, ms, alpha_row, beta_row, gamma_row)
-							+ hockneytime_rab(P/Pc_cand, m, ms, alpha_column, beta_column, gamma_column);
+							+ hockneytime_rd(P/Pc_cand, m, ms, alpha_column, beta_column, gamma_column);
 			if(t_cand < t_opt){
 				Pc_opt = Pc_cand;
 				t_opt = t_cand;
 			}
 		}
-		
+			
 	}
 	else{
 		//use the derivative
-		return 1;
-
+		Pc_opt = 1;
 	}
 	Pc_ptr = &Pc_opt;
 	return t_opt;

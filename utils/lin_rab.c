@@ -34,12 +34,11 @@ double lin_rab(long long P, long long m, long long ms, double alpha_beta_gamma[3
 				t_opt = t_cand;
 			}
 		}
-		
+			
 	}
 	else{
 		//use the derivative
 		Pc_opt = 1;
-
 	}
 	Pc_ptr = &Pc_opt;
 	return t_opt;
