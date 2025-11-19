@@ -1,10 +1,12 @@
 #include"../macros.h"
-
+#include"hockeytime_lin.h"
 
 
 
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
 typedef long long ll;
+
+
 
 double lin_lin(long long P, long long m, long long ms, double alpha, double beta, double gamma, ll * Pc_ptr){
 	long long pow1 = 1;
@@ -18,6 +20,7 @@ double lin_lin(long long P, long long m, long long ms, double alpha, double beta
 	if(P == pow1){
 		//brute force check all pow1 combinations
 		
+			
 	}
 	else{
 		//use the derivative
