@@ -78,7 +78,7 @@ void my_init(char path[]){
 }
 
 
-double Stage1(ll P, ll m, ll ms, double alpha, double beta, double gamma, ll * ans){
+double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1] ll * ans){
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
 	
@@ -114,5 +114,6 @@ double Stage1(ll P, ll m, ll ms, double alpha, double beta, double gamma, ll * a
 
 int main(){
 	my_init("./data_store/sample.csv");
+
 }
  
