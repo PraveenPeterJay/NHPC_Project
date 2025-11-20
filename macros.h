@@ -13,6 +13,8 @@ typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);
 //takes in P, m, alpha, beta, gamma
 //pointer to Pc to return it
 
+extern double times41[NUM_ALGOS+1][NUM_ALGOS+1]; 
+
 
 
 

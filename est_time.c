@@ -25,20 +25,27 @@ void my_init(char path[]){
 
     // Skip header line
     fgets(line, sizeof(line), fp);
+	printf("-------------------------------------------------------------\n");
+	printf("%-30s | %-20s %-20s %-20s\n", "Algorithm", "Alpha", "Beta", "Gamma");
+	printf("-------------------------------------------------------------\n");
 
-    while (fgets(line, sizeof(line), fp) && i < NUM_ALGOS) {
-        char algo[MAX_FIELD];
-        double a, b, c;
+	while (fgets(line, sizeof(line), fp) && i < NUM_ALGOS) {
+		char algo[MAX_FIELD];
+		double a, b, c;
 
-        // Parse CSV line: algo,alpha,beta,gamma
-        if (sscanf(line, "%[^,],%lf,%lf,%lf", algo, &a, &b, &c) == 4) { //can put %63 if we want
-            alpha_beta_gamma[0][i] = a;
-            alpha_beta_gamma[1][i] = b;
-            alpha_beta_gamma[2][i] = c;
+		if (sscanf(line, "%[^,],%lf,%lf,%lf", algo, &a, &b, &c) == 4) {
+			alpha_beta_gamma[0][i] = a;
+			alpha_beta_gamma[1][i] = b;
+			alpha_beta_gamma[2][i] = c;
 
-            i++;
-        }
-    }
+			// Pretty formatted row
+			printf("%-15s | %-10.4f %-10.4f %-10.4f\n", algo, a, b, c);
+			i++;
+		}
+	}
+
+	printf("-------------------------------------------------------------\n");
+
 
     fclose(fp);
 
@@ -101,6 +108,7 @@ double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1], ll * an
 				algorow_opt = i;
 				algocol_opt = j;
 				Pc_opt = *pc_cand;
+				min_time = time_taken;
 			}	
 		}	
 	}
@@ -111,14 +119,19 @@ double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1], ll * an
 	return min_time;
 }
 
-
+void printtimes(){
+	
+}
 
 int main(){
 	my_init("./data_store/sample.csv");
-	ll P = 128, m = 128;
+	ll P = 1024, m = 1024;
 	ll ms = m/P;
 	ll * ans = malloc(3*sizeof(ll));
 	Stage1(P, m, ms, alpha_beta_gamma, ans);
+	printtimes();
+
+
 	for(int i=0; i<3; i++){
 		printf("ans[%d] is %d\n", i, ans[i]);
 	}

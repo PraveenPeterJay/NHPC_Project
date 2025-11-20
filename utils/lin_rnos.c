@@ -40,6 +40,7 @@ double lin_rnos(long long P, long long m, long long ms, double alpha_beta_gamma[
 		//use the derivative
 		Pc_opt = 1;
 	}
-	Pc_ptr = &Pc_opt;
+	*Pc_ptr = Pc_opt;
+	times41[LINEAR_ALL_REDUCE][RING_ALL_REDUCE] = t_opt;
 	return t_opt;
 }

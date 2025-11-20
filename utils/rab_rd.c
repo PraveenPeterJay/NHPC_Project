@@ -41,6 +41,7 @@ double rab_rd(long long P, long long m, long long ms, double alpha_beta_gamma[3]
 		//use the derivative
 		Pc_opt = 1;
 	}
-	Pc_ptr = &Pc_opt;
+	*Pc_ptr = Pc_opt;
+	times41[RABENSEIFNER_ALL_REDUCE][RECURSIVE_DOUBLING_ALL_REDUCE] = t_opt;
 	return t_opt;
 }
