@@ -85,7 +85,7 @@ void my_init(char path[]){
 }
 
 
-double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1], ll * ans){
+double Stage1(ll P, ll m, ll ms, ll * ans){
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
 	printf("Stage1 called\n");
@@ -120,7 +120,7 @@ double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1], ll * an
 }
 
 void printtimes(){
-	
+
 }
 
 int main(){
@@ -128,7 +128,7 @@ int main(){
 	ll P = 1024, m = 1024;
 	ll ms = m/P;
 	ll * ans = malloc(3*sizeof(ll));
-	Stage1(P, m, ms, alpha_beta_gamma, ans);
+	Stage1(P, m, ms, ans);
 	printtimes();
 
 
