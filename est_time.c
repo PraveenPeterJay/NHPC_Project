@@ -14,6 +14,7 @@
 
 
 getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];
+execAllReduce algo[NUM_ALGOS];
 
 double alpha_beta_gamma[3][NUM_ALGOS+1];
 
@@ -27,9 +28,9 @@ void my_init(char path[]){
 
     // Skip header line
     fgets(line, sizeof(line), fp);
-	printf("-------------------------------------------------------------\n");
-	printf("%-30s | %-20s %-20s %-20s\n", "Algorithm", "Alpha", "Beta", "Gamma");
-	printf("-------------------------------------------------------------\n");
+	// printf("-------------------------------------------------------------\n");
+	// printf("%-30s | %-20s %-20s %-20s\n", "Algorithm", "Alpha", "Beta", "Gamma");
+	// printf("-------------------------------------------------------------\n");
 
 	while (fgets(line, sizeof(line), fp) && i < NUM_ALGOS) {
 		char algo[MAX_FIELD];
@@ -41,12 +42,12 @@ void my_init(char path[]){
 			alpha_beta_gamma[2][i] = c;
 
 			// Pretty formatted row
-			printf("%-15s | %-10.4f %-10.4f %-10.4f\n", algo, a, b, c);
+			// printf("%-15s | %-10.4f %-10.4f %-10.4f\n", algo, a, b, c);
 			i++;
 		}
 	}
 
-	printf("-------------------------------------------------------------\n");
+	// printf("-------------------------------------------------------------\n");
 
 
     fclose(fp);
@@ -83,14 +84,17 @@ void my_init(char path[]){
 	func[4][3] = rd_rs;
 	func[4][4] = rd_rd;
 
-	printf("Init Done!\n");
+	// printf("Init Done!\n");
 }
 
 
 double Stage1(ll P, ll m, ll ms, ll * ans){
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
-	printf("Stage1 called\n");
+	my_init("./data_store/sample.csv");
+	// sleep(1);
+	// printf("init done inside stage1\n");
+	// printf("Stage1 called\n");
 	double min_time = 1e10;
 	find_and_store_factors(P);
 	ll Pc_opt = P;
@@ -122,8 +126,6 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	return min_time;
 }
 
-
-
 // %-15s | %-10.4f %-10.4f %-10.4f
 void printtimes(){
 	printf("TIMES ARE\n");
@@ -142,8 +144,8 @@ void printtimes(){
 	}
 }
 
-int main(){
-	my_init("./data_store/sample.csv");
+int not_main(){
+	
 	ll P = 1000, m = 1024;
 	ll ms = m/P;
 	ll * ans = malloc(3*sizeof(ll));
@@ -152,7 +154,7 @@ int main(){
 
 
 	for(int i=0; i<3; i++){
-		printf("ans[%d] is %d\n", i, ans[i]);
+		printf("ans[%d] is %lld\n", i, ans[i]);
 	}
 	return 0;
 }

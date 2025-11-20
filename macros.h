@@ -17,6 +17,9 @@ typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);
 //takes in P, m, alpha, beta, gamma
 //pointer to Pc to return it
 
+typedef void (*execAllReduce)(ll, ll, ll, ll, double*[], double*[]);
+//P, Pc, m, ms, send-buffer, recv-buffer
+
 extern double times41[NUM_ALGOS+1][NUM_ALGOS+1]; 
 
 
