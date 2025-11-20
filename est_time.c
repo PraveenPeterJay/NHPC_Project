@@ -84,6 +84,13 @@ void my_init(char path[]){
 	func[4][3] = rd_rs;
 	func[4][4] = rd_rd;
 
+	//assign algo elements here
+	// algo[LINEAR_ALL_REDUCE] = 
+	// algo[RABENSEIFNER_ALL_REDUCE] = 
+	// algo[RING_ALL_REDUCE] = 
+	// algo[RING_SEG_ALL_REDUCE] = 
+	// algo[RECURSIVE_DOUBLING_ALL_REDUCE] = 
+
 	// printf("Init Done!\n");
 }
 
