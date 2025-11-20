@@ -4,7 +4,7 @@
 
 
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
-typedef long long ll;
+
 
 double rnos_rnos(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS+1], ll * Pc_ptr){
 	long long pow1 = 1;

@@ -4,7 +4,7 @@
 
 
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
-typedef long long ll;
+
 
 
 

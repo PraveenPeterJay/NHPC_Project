@@ -1,5 +1,5 @@
+// #pragma once
 
-typedef long long ll;
 
 double lin_rab(long long P, long long m, long long ms,
                double alpha_beta_gamma[3][NUM_ALGOS+1],
