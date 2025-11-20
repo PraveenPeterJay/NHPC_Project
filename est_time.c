@@ -89,7 +89,7 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
 	printf("Stage1 called\n");
-	double min_time = 1e5;
+	double min_time = 1e10;
 	ll Pc_opt = P;
 	int algorow_opt, algocol_opt;
 	
@@ -119,8 +119,24 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	return min_time;
 }
 
-void printtimes(){
 
+
+// %-15s | %-10.4f %-10.4f %-10.4f
+void printtimes(){
+	printf("TIMES ARE\n");
+	printf("  | ");
+	for(int j=0; j<NUM_ALGOS; j++){
+		printf("%-10d ",  j);
+	}
+	printf("\n");
+	printf("----------------------------------------------------------\n");
+	for(int i=0; i<NUM_ALGOS; i++){
+		printf("%d | ", i);
+		for(int j=0; j<NUM_ALGOS; j++){
+			printf("%-10.4lf ", times41[i][j]);
+		}
+		printf("\n");
+	}
 }
 
 int main(){

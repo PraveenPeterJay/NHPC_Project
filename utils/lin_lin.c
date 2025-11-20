@@ -1,5 +1,6 @@
 #include"../macros.h"
 #include"hockneytime_lin.h"
+#include<stdio.h>
 
 
 
@@ -24,7 +25,7 @@ double lin_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3
 	pow1 /= 2;
 	//now pow1 is the highest power of 2 in P
 	ll Pc_opt=1;
-	double t_opt=1000;
+	double t_opt=1e10;
 	if(P == pow1){
 		//brute force check all pow1 combinations
 		for(int Pc_cand=1; Pc_cand < P; Pc_cand *= 2){
@@ -33,6 +34,9 @@ double lin_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3
 			if(t_cand < t_opt){
 				Pc_opt = Pc_cand;
 				t_opt = t_cand;
+			}
+			else{
+				printf("%d is wayy bigger\n", t_cand);
 			}
 		}
 			

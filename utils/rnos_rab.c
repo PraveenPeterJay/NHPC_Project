@@ -23,7 +23,7 @@ double rnos_rab(long long P, long long m, long long ms, double alpha_beta_gamma[
 	pow1 /= 2;
 	//now pow1 is the highest power of 2 in P
 	ll Pc_opt=1;
-	double t_opt=1000;
+	double t_opt=1e10;
 	if(P == pow1){
 		//brute force check all pow1 combinations
 		for(int Pc_cand=1; Pc_cand < P; Pc_cand *= 2){
