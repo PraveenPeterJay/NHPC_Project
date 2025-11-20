@@ -1,4 +1,6 @@
 #include"../macros.h"
+#include"hockneytime_rd.h"
+#include"hockneytime_lin.h"
 
 
 
@@ -22,15 +24,23 @@ double rd_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3]
 	pow1 /= 2;
 	//now pow1 is the highest power of 2 in P
 	ll Pc_opt=1;
-	int hockney_time_min=1000;
+	double t_opt=1000;
 	if(P == pow1){
 		//brute force check all pow1 combinations
-		
+		for(int Pc_cand=1; Pc_cand < P; Pc_cand *= 2){
+			double t_cand = hockneytime_rd(Pc_cand, m, ms, alpha_row, beta_row, gamma_row)
+							+ hockneytime_lin(P/Pc_cand, m, ms, alpha_column, beta_column, gamma_column);
+			if(t_cand < t_opt){
+				Pc_opt = Pc_cand;
+				t_opt = t_cand;
+			}
+		}
+			
 	}
 	else{
 		//use the derivative
-
+		Pc_opt = 1;
 	}
 	Pc_ptr = &Pc_opt;
-	return hockney_time_min;
+	return t_opt;
 }
