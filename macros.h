@@ -8,7 +8,8 @@
 #define RECURSIVE_DOUBLING_ALL_REDUCE 4
 
 #define NUM_ALGOS 5
-
+#define MAX_FACTORS (int)1e5
+// int MAX_FACTORS = (int)1e5;
 
 typedef long long ll;
 
@@ -19,6 +20,8 @@ typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);
 extern double times41[NUM_ALGOS+1][NUM_ALGOS+1]; 
 
 
-
+void find_and_store_factors(int P);
+extern int NUM_FACTORS;
+extern int factorsP[MAX_FACTORS+1];
 
 

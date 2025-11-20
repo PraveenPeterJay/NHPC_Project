@@ -37,7 +37,16 @@ double rnos_rnos(long long P, long long m, long long ms, double alpha_beta_gamma
 	}
 	else{
 		//use the derivative
-		Pc_opt = 1;
+        //instead, use al factors
+		for(int i=0; i < NUM_FACTORS; i+=1){
+			int Pc_cand = factorsP[i];
+			double t_cand = hockneytime_rnos(Pc_cand, m, ms, alpha_row, beta_row, gamma_row)
+							+ hockneytime_rnos(P/Pc_cand, m, ms, alpha_column, beta_column, gamma_column);
+			if(t_cand < t_opt){
+				Pc_opt = Pc_cand;
+				t_opt = t_cand;
+			}
+		}
 	}
 	*Pc_ptr = Pc_opt;
 	times41[RING_ALL_REDUCE][RING_ALL_REDUCE] = t_opt;

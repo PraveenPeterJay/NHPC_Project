@@ -14,13 +14,15 @@
 
 
 getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];
+
 double alpha_beta_gamma[3][NUM_ALGOS+1];
 
 
+
 void my_init(char path[]){
-	//read alpha beta and gamma from a csv
-	FILE*fp = fopen(path, "r");
-	char line[256];
+    //read alpha beta and gamma from a csv
+    FILE*fp = fopen(path, "r");
+    char line[256];
     int i = 0;
 
     // Skip header line
@@ -90,6 +92,7 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	//within a row ar is the algorithm used.
 	printf("Stage1 called\n");
 	double min_time = 1e10;
+	find_and_store_factors(P);
 	ll Pc_opt = P;
 	int algorow_opt, algocol_opt;
 	
@@ -141,7 +144,7 @@ void printtimes(){
 
 int main(){
 	my_init("./data_store/sample.csv");
-	ll P = 1024, m = 1024;
+	ll P = 1000, m = 1024;
 	ll ms = m/P;
 	ll * ans = malloc(3*sizeof(ll));
 	Stage1(P, m, ms, ans);

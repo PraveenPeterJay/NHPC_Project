@@ -1,6 +1,5 @@
 #include"../macros.h"
 #include"hockneytime_lin.h"
-#include<stdio.h>
 
 
 
@@ -35,15 +34,21 @@ double lin_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3
 				Pc_opt = Pc_cand;
 				t_opt = t_cand;
 			}
-			else{
-				printf("%d is wayy bigger\n", t_cand);
-			}
 		}
 			
 	}
 	else{
 		//use the derivative
-		Pc_opt = 1;
+        //instead, use al factors
+		for(int i=0; i < NUM_FACTORS; i+=1){
+			int Pc_cand = factorsP[i];
+			double t_cand = hockneytime_lin(Pc_cand, m, ms, alpha_row, beta_row, gamma_row)
+							+ hockneytime_lin(P/Pc_cand, m, ms, alpha_column, beta_column, gamma_column);
+			if(t_cand < t_opt){
+				Pc_opt = Pc_cand;
+				t_opt = t_cand;
+			}
+		}
 	}
 	*Pc_ptr = Pc_opt;
 	times41[LINEAR_ALL_REDUCE][LINEAR_ALL_REDUCE] = t_opt;
