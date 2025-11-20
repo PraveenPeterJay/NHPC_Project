@@ -10,7 +10,7 @@
 //#define RECURSIVE_DOUBLING_ALL_REDUCE 4
 
 
-#define MAX_FIELD 64
+#define MAX_FIELD 256
 
 
 getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];
@@ -78,12 +78,12 @@ void my_init(char path[]){
 }
 
 
-double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1] ll * ans){
+double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1], ll * ans){
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
-	
+	printf("Stage1 called\n");
 	double min_time = 1e5;
-	ll Pc_opt = 0;
+	ll Pc_opt = P;
 	int algorow_opt, algocol_opt;
 	
 	if(ans == NULL)
@@ -92,9 +92,10 @@ double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1] ll * ans
 	//that is just a fallback
 	
 	
-	for(int i=0; i<NUM_ALGOS+1; i++){
-		for(int j=0; j<NUM_ALGOS+1; j++){
+	for(int i=0; i<NUM_ALGOS; i++){
+		for(int j=0; j<NUM_ALGOS; j++){
 			ll * pc_cand = malloc(1*sizeof(ll));
+			// printf("going to call a function %d %d\n", i, j);
 			double time_taken = func[i][j](P, m, ms, alpha_beta_gamma,pc_cand);
 			if(time_taken < min_time){
 				algorow_opt = i;
@@ -114,6 +115,13 @@ double Stage1(ll P, ll m, ll ms, double alpha_beta_gamma[][NUM_ALGOS+1] ll * ans
 
 int main(){
 	my_init("./data_store/sample.csv");
-
+	ll P = 128, m = 128;
+	ll ms = m/P;
+	ll * ans = malloc(3*sizeof(ll));
+	Stage1(P, m, ms, alpha_beta_gamma, ans);
+	for(int i=0; i<3; i++){
+		printf("ans[%d] is %d\n", i, ans[i]);
+	}
+	return 0;
 }
  

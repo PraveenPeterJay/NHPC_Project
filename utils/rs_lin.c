@@ -1,6 +1,6 @@
 #include"../macros.h"
-#include"hockney_rs.h"
-#include"hockney_lin.h"
+#include"hockneytime_rs.h"
+#include"hockneytime_lin.h"
 
 
 
