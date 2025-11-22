@@ -1,8 +1,18 @@
+//This code 
+	//1. tries to estimate the time taken for different combination of allreduce algorithms
+	//2. Then calculates the best algorithm after estimating the time, by using parameters alpha, beta, gamma, P (no. of processes) & m (message size)
+
+
 #include<stdio.h>
 #include<stdlib.h>
 #include"macros.h"
-#include"./utils/all_combos.h"
+#include"./utils/all_combos.h"			//Declares lin_lin, lin_rab, and similar 25 functions
 #include<string.h>
+#include "linear_allreduce.h"
+#include "rabenseifner_allreduce.h"
+#include "ring_allreduce.h"
+#include "ring_seg_allreduce.h"
+#include "recursive_doubling_allreduce.h"
 //#define LINEAR_ALL_REDUCE 0
 //#define RABENSEIFNER_ALL_REDUCE 1
 //#define RING_ALL_REDUCE 2
@@ -13,15 +23,15 @@
 #define MAX_FIELD 256
 
 
-getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];
-execAllReduce algo[NUM_ALGOS];
+getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];					//func[i][j] estimates the time taken when using algorithm i for rows and j for columns
+execAllReduce algo[NUM_ALGOS];									//algo[i] stores the function pointer that implements the algorithm defined by the macro i
 
-double alpha_beta_gamma[3][NUM_ALGOS+1];
+double alpha_beta_gamma[3][NUM_ALGOS+1];						//alpha_beta_gamma[i][j] stores alpha, beta, gamma values for algorithm j
 
 
-
+//Initialises our simulation by reading alpha, beta, gamma and loading function pointer tables
 void my_init(char path[]){
-    //read alpha beta and gamma from a csv
+    //1. read alpha beta and gamma from a csv
     FILE*fp = fopen(path, "r");
     char line[256];
     int i = 0;
@@ -51,8 +61,9 @@ void my_init(char path[]){
 
 
     fclose(fp);
+	//2. Code for reading alpha, beta, gamma ends here
 
-
+	//CHANGES NEEDED
 	//assign all function pointers
 	func[0][0] = lin_lin;
 	func[0][1] = lin_rab;
@@ -85,17 +96,17 @@ void my_init(char path[]){
 	func[4][4] = rd_rd;
 
 	//assign algo elements here
-	// algo[LINEAR_ALL_REDUCE] = 
-	// algo[RABENSEIFNER_ALL_REDUCE] = 
-	// algo[RING_ALL_REDUCE] = 
-	// algo[RING_SEG_ALL_REDUCE] = 
-	// algo[RECURSIVE_DOUBLING_ALL_REDUCE] = 
+	algo[LINEAR_ALL_REDUCE] = linear_allreduce;
+	algo[RABENSEIFNER_ALL_REDUCE] = rabenseifner_all_reduce;
+	algo[RING_ALL_REDUCE] = ring_allreduce;
+	algo[RING_SEG_ALL_REDUCE] = ring_seg_allreduce;
+	algo[RECURSIVE_DOUBLING_ALL_REDUCE] = recursive_doubling_allreduce;
 
 	// printf("Init Done!\n");
 }
 
-
-double Stage1(ll P, ll m, ll ms, ll * ans){
+//Finds the optimal algorithm for a given set of parameters
+double Stage1(ll P, ll m, ll ms, ll * ans){				//ans is a (1x3) array that stores 3 things: ans[0] stores optimal row algo, ans[1] stores optimal column algo, while ans[2] stores optimal Pc value
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
 	my_init("./data_store/sample.csv");
@@ -103,7 +114,7 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	// printf("init done inside stage1\n");
 	// printf("Stage1 called\n");
 	double min_time = 1e10;
-	find_and_store_factors(P);
+	find_and_store_factors(P);				//Finds the factors for P in factorsP[] array which is a global variable
 	ll Pc_opt = P;
 	int algorow_opt, algocol_opt;
 	
@@ -115,9 +126,19 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	
 	for(int i=0; i<NUM_ALGOS; i++){
 		for(int j=0; j<NUM_ALGOS; j++){
-			ll * pc_cand = malloc(1*sizeof(ll));
+			ll * pc_cand = malloc(1*sizeof(ll));			//pc_cand stands for pc_candidate
 			// printf("going to call a function %d %d\n", i, j);
-			double time_taken = func[i][j](P, m, ms, alpha_beta_gamma,pc_cand);
+			double time_taken_predicted = func[i][j](P, m, ms, alpha_beta_gamma,pc_cand);
+			double time_taken_actual;
+
+
+
+			//start time
+			//initialisation of sendbuf, recvbuf, and other variables
+			algo[i](const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
+			//end_time
+			//time_taken = end_time() - start_time()
+			
 			if(time_taken < min_time){
 				algorow_opt = i;
 				algocol_opt = j;
@@ -132,6 +153,7 @@ double Stage1(ll P, ll m, ll ms, ll * ans){
 	ans[2] = Pc_opt;
 	return min_time;
 }
+
 
 // %-15s | %-10.4f %-10.4f %-10.4f
 void printtimes(){
@@ -151,7 +173,8 @@ void printtimes(){
 	}
 }
 
-int not_main(){
+//Driver function
+int main(){
 	
 	ll P = 1000, m = 1024;
 	ll ms = m/P;
