@@ -93,8 +93,9 @@ Commands below are executed from the **root directory** of the project, assuming
 
 **Compile the Hierarchical code:**
 ```bash
-smpicc hierarchical_allreduce.c
-smpirun -n <P> -platform platform.xml ./a.out <Pc>
+make clean
+make all
+smpirun -n <process_count> -platform ./network_configuration_estimation/platform.xml ./suara2 <message size>
 ```
 
 **Execute the Hierarchical Allreduce:**

@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
             memcpy(recv_buf, send_buf, m * sizeof(double)); 
 
             MPI_Barrier(MPI_COMM_WORLD);
-            custom_linear_allreduce_p2p(send_buf, recv_buf, m, MPI_COMM_WORLD);
+            custom_linear_allreduce_p2p(send_buf, recv_buf, m, MPI_COMM_WORLD);     //CHANGE HERE
             
             busy_wait(MICRO_PAUSE_TICKS);
         }
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
             double start_time = MPI_Wtime();
             
             // Execute the custom Linear Allreduce
-            custom_linear_allreduce_p2p(send_buf, recv_buf, m, MPI_COMM_WORLD);
+            custom_linear_allreduce_p2p(send_buf, recv_buf, m, MPI_COMM_WORLD);     //CHANGE HERE
             
             MPI_Barrier(MPI_COMM_WORLD);
             double end_time = MPI_Wtime();
