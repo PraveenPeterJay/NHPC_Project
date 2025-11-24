@@ -145,9 +145,9 @@ int main(int argc, char *argv[]) {
         printf("Processes: %d\n", size);
         printf("Data vector size: %d doubles (%.2f KB)\n", data_vector_size, message_size_bytes / 1024.0);
         printf("Stage 1 time: %.6f sec\n", stage1_time);
-        printf("Algorithm along row: %d", algorow_opt);
-        printf("Algorithm along column: %d", algocol_opt);
-        printf("Pc opt %d", Pc_opt)
+        printf("Algorithm along row: %lld\n", algorow_opt);
+        printf("Algorithm along column: %lld\n", algocol_opt);
+        printf("Pc opt %lld\n", cols);
         printf("All reduce time: %.6f sec\n", allreduce_time);
         printf("Total time: %.6f sec\n", total_time);
         // printf("Effective bandwidth (approx.): %.3f MB/s\n", effective_bandwidth / (1024 * 1024));

@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 void ring_seg_allreduce(void *sendbuf, void *recvbuf, ll count, MPI_Comm comm) {
-    printf("Using dummy ring Implementation instead of ring segmentation implementation\n");
+    // printf("Using dummy ring Implementation instead of ring segmentation implementation\n");
 
     int rank, size;
     MPI_Comm_rank(comm, &rank);
