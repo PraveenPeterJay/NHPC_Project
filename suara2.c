@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <math.h>
-#include"est_time.h"
+#include "est_time.h"
+#include "macros.h"
 
 /**
  * @brief Performs a two-step hierarchical Allreduce on a generalized grid (R x C).
@@ -55,16 +56,21 @@ int main(int argc, char *argv[]) {
 
 	for(int i=0; i<2e7; i++) {
 		int b=1;
+        if(b == 3){
+            printf("%d never here\n", b);
+        }
 	}
 
+    my_init("./data_store/sample.csv");
     Stage1(P, m, ms, ans);
 
-    ll algorow_opt, algocol_opt, rows, cols;
+    ll algorow_opt, algocol_opt, cols;
     algorow_opt = ans[0];
     algocol_opt = ans[1];
     cols = ans[2];
 
-    rows = size / cols;
+    // ll rows;
+    // rows = size / cols;
     row_id = rank / cols; 
     col_id = rank % cols;
 
@@ -79,7 +85,9 @@ int main(int argc, char *argv[]) {
     MPI_Comm_split(MPI_COMM_WORLD, row_id, key, &row_comm);
     
     // Perform Allreduce within each row on the full vector
-    MPI_Allreduce(local_sum, row_result, data_vector_size, MPI_DOUBLE, MPI_SUM, row_comm);
+    // MPI_Allreduce(local_sum, row_result, data_vector_size, MPI_DOUBLE, MPI_SUM, row_comm);
+    algo[algorow_opt](local_sum, row_result, data_vector_size, row_comm);
+
     
     // Update local_sum with the result of the row Allreduce
     for (int i = 0; i < data_vector_size; i++) {
@@ -101,7 +109,8 @@ int main(int argc, char *argv[]) {
     MPI_Comm_split(MPI_COMM_WORLD, col_id, key, &col_comm);
 
     // Perform Allreduce within each column, using the row result (local_sum) as input
-    MPI_Allreduce(local_sum, col_result, data_vector_size, MPI_DOUBLE, MPI_SUM, col_comm);
+    // MPI_Allreduce(local_sum, col_result, data_vector_size, MPI_DOUBLE, MPI_SUM, col_comm);
+    algo[algocol_opt](local_sum, row_result, data_vector_size, col_comm);
 
     // Update final local_sum
     for (int i = 0; i < data_vector_size; i++) {
@@ -136,6 +145,9 @@ int main(int argc, char *argv[]) {
         printf("Processes: %d\n", size);
         printf("Data vector size: %d doubles (%.2f KB)\n", data_vector_size, message_size_bytes / 1024.0);
         printf("Stage 1 time: %.6f sec\n", stage1_time);
+        printf("Algorithm along row: %d", algorow_opt);
+        printf("Algorithm along column: %d", algocol_opt);
+        printf("Pc opt %d", Pc_opt)
         printf("All reduce time: %.6f sec\n", allreduce_time);
         printf("Total time: %.6f sec\n", total_time);
         // printf("Effective bandwidth (approx.): %.3f MB/s\n", effective_bandwidth / (1024 * 1024));

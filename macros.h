@@ -16,18 +16,19 @@
 
 typedef long long ll;
 
-typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);         //defines a type called getTimeandPc which is a function pointer to a function that takes in (P, m, ms, alpha_beta_gamma, optimal_Pc) & returns a double containing time_taken to apply allReduce algo i on rows, and j on columns
+typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS], ll*);         //defines a type called getTimeandPc which is a function pointer to a function that takes in (P, m, ms, alpha_beta_gamma, optimal_Pc) & returns a double containing time_taken to apply allReduce algo i on rows, and j on columns
 //takes in P, m, alpha, beta, gamma
 //pointer to Pc to return it
 
 typedef void (*execAllReduce)(void *, void *, ll, MPI_Comm);
 //int MPI_Allreduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
 
-extern double times41[NUM_ALGOS+1][NUM_ALGOS+1]; 
+extern double times41[NUM_ALGOS][NUM_ALGOS]; 
 
 
 void find_and_store_factors(int P);
 extern int NUM_FACTORS;
 extern int factorsP[MAX_FACTORS+1];
+extern execAllReduce algo[NUM_ALGOS];		
 
 

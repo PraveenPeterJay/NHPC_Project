@@ -6,7 +6,7 @@
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
 
 
-double rs_rs(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS+1], ll * Pc_ptr){
+double rs_rs(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS], ll * Pc_ptr){
 	long long pow1 = 1;
 
 	double alpha_row = alpha_beta_gamma[0][RING_SEG_ALL_REDUCE];

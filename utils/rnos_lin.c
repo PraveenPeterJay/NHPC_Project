@@ -7,7 +7,7 @@
 //typedef double (*getTimeandPc)(ll, ll, double, double, double, ll*);
 
 
-double rnos_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS+1], ll * Pc_ptr){
+double rnos_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS], ll * Pc_ptr){
 	long long pow1 = 1;
 
 	double alpha_row = alpha_beta_gamma[0][RING_ALL_REDUCE];

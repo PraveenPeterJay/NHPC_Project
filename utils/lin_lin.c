@@ -8,7 +8,7 @@
 
 
 
-double lin_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS+1], ll * Pc_ptr){
+double lin_lin(long long P, long long m, long long ms, double alpha_beta_gamma[3][NUM_ALGOS], ll * Pc_ptr){
 	long long pow1 = 1;
 
 	double alpha_row = alpha_beta_gamma[0][LINEAR_ALL_REDUCE];

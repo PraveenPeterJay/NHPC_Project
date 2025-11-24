@@ -2,7 +2,7 @@
 
 
 
-double times41[NUM_ALGOS+1][NUM_ALGOS+1];
+double times41[NUM_ALGOS][NUM_ALGOS];
 int factorsP[MAX_FACTORS+1];						//factorsP[i] stores the list of factors for a given P. For every new P, we override the factorsP arr
 int NUM_FACTORS = 0;
 

@@ -23,10 +23,10 @@
 #define MAX_FIELD 256
 
 
-getTimeandPc func[NUM_ALGOS+1][NUM_ALGOS+1];					//func[i][j] estimates the time taken when using algorithm i for rows and j for columns
+getTimeandPc func[NUM_ALGOS][NUM_ALGOS];					//func[i][j] estimates the time taken when using algorithm i for rows and j for columns
 execAllReduce algo[NUM_ALGOS];									//algo[i] stores the function pointer that implements the algorithm defined by the macro i
 
-double alpha_beta_gamma[3][NUM_ALGOS+1];						//alpha_beta_gamma[i][j] stores alpha, beta, gamma values for algorithm j
+double alpha_beta_gamma[3][NUM_ALGOS];						//alpha_beta_gamma[i][j] stores alpha, beta, gamma values for algorithm j
 
 
 //Initialises our simulation by reading alpha, beta, gamma and loading function pointer tables
@@ -97,7 +97,7 @@ void my_init(char path[]){
 
 	//assign algo elements here
 	algo[LINEAR_ALL_REDUCE] = linear_allreduce;
-	algo[RABENSEIFNER_ALL_REDUCE] = rabenseifner_all_reduce;
+	algo[RABENSEIFNER_ALL_REDUCE] = rabenseifner_allreduce;
 	algo[RING_ALL_REDUCE] = ring_allreduce;
 	algo[RING_SEG_ALL_REDUCE] = ring_seg_allreduce;
 	algo[RECURSIVE_DOUBLING_ALL_REDUCE] = recursive_doubling_allreduce;
@@ -109,14 +109,19 @@ void my_init(char path[]){
 double Stage1(ll P, ll m, ll ms, ll * ans){				//ans is a (1x3) array that stores 3 things: ans[0] stores optimal row algo, ans[1] stores optimal column algo, while ans[2] stores optimal Pc value
 	//recall that Pc is the number of columns
 	//within a row ar is the algorithm used.
-	my_init("./data_store/sample.csv");
+	
+	/*
+		Before calling this you must call my_init!!
+	*/
+
+	//debug:
 	// sleep(1);
 	// printf("init done inside stage1\n");
 	// printf("Stage1 called\n");
 	double min_time = 1e10;
 	find_and_store_factors(P);				//Finds the factors for P in factorsP[] array which is a global variable
 	ll Pc_opt = P;
-	int algorow_opt, algocol_opt;
+	int algorow_opt = 0, algocol_opt = 0;
 	
 	if(ans == NULL)
 		ans = malloc(3*sizeof(ll));
@@ -129,21 +134,22 @@ double Stage1(ll P, ll m, ll ms, ll * ans){				//ans is a (1x3) array that store
 			ll * pc_cand = malloc(1*sizeof(ll));			//pc_cand stands for pc_candidate
 			// printf("going to call a function %d %d\n", i, j);
 			double time_taken_predicted = func[i][j](P, m, ms, alpha_beta_gamma,pc_cand);
-			double time_taken_actual;
+			// double time_taken_actual;
 
 
 
 			//start time
 			//initialisation of sendbuf, recvbuf, and other variables
-			algo[i](const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
+
+			// algo[i](const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
 			//end_time
 			//time_taken = end_time() - start_time()
 			
-			if(time_taken < min_time){
+			if(time_taken_predicted < min_time){
 				algorow_opt = i;
 				algocol_opt = j;
 				Pc_opt = *pc_cand;
-				min_time = time_taken;
+				min_time = time_taken_predicted;
 			}	
 		}	
 	}
@@ -174,7 +180,7 @@ void printtimes(){
 }
 
 //Driver function
-int main(){
+int main2(){
 	
 	ll P = 1000, m = 1024;
 	ll ms = m/P;
