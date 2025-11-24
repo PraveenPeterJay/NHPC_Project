@@ -16,7 +16,7 @@
 
 typedef long long ll;
 
-typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);
+typedef double (*getTimeandPc)(ll, ll, ll, double[][NUM_ALGOS+1], ll*);         //defines a type called getTimeandPc which is a function pointer to a function that takes in (P, m, ms, alpha_beta_gamma, optimal_Pc) & returns a double containing time_taken to apply allReduce algo i on rows, and j on columns
 //takes in P, m, alpha, beta, gamma
 //pointer to Pc to return it
 
