@@ -1,8 +1,11 @@
 #include "ring_seg_allreduce.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void ring_seg_allreduce(void *sendbuf, void *recvbuf, ll count, MPI_Comm comm) {
+    printf("Using dummy ring Implementation instead of ring segmentation implementation\n");
+
     int rank, size;
     MPI_Comm_rank(comm, &rank);
     MPI_Comm_size(comm, &size);
@@ -10,68 +13,51 @@ void ring_seg_allreduce(void *sendbuf, void *recvbuf, ll count, MPI_Comm comm) {
     double *send_buf = (double*)sendbuf;
     double *recv_buf = (double*)recvbuf;
     
-    memcpy(recv_buf, send_buf, count * sizeof(double));
+    int chunk_size = count / size;
+    memcpy(recv_buf, send_buf, sizeof(double) * count);
     
-    // Segment size (default 8KB = 1024 doubles)
-    ll segment_size = 1024;
-    if (segment_size > count / size) segment_size = count / size;
+    double* recv_chunk = (double *) malloc(sizeof(double) * chunk_size);
     
-    ll chunk_size = count / size;
-    ll num_segments = (chunk_size + segment_size - 1) / segment_size;
-    
-    double *temp_buf = (double*)malloc(segment_size * sizeof(double));
-    
-    int left = (rank - 1 + size) % size;
-    int right = (rank + 1) % size;
-    
-    // PHASE 1: REDUCE-SCATTER with segmentation
+    // Reduce Scatter
+    // Perform size-1 steps
     for (int step = 0; step < size - 1; step++) {
-        int send_chunk = (rank - step + size) % size;
-        int recv_chunk = (rank - step - 1 + size) % size;
+        int send_chunk_idx = (rank - step + size) % size;
+        int recv_chunk_idx = (rank - step - 1 + size) % size;
+        int send_to = (rank + 1) % size;
+        int recv_from = (rank - 1 + size) % size;
         
-        ll chunk_offset_send = send_chunk * chunk_size;
-        ll chunk_offset_recv = recv_chunk * chunk_size;
+        MPI_Request send_req, recv_req;
+        MPI_Isend(&recv_buf[send_chunk_idx * chunk_size], chunk_size, MPI_DOUBLE,
+                  send_to, 0, comm, &send_req);
+        MPI_Irecv(recv_chunk, chunk_size, MPI_DOUBLE,
+                  recv_from, 0, comm, &recv_req);
         
-        for (ll seg = 0; seg < num_segments; seg++) {
-            ll seg_start = seg * segment_size;
-            ll seg_count = segment_size;
-            if (seg_start + seg_count > chunk_size) {
-                seg_count = chunk_size - seg_start;
-            }
-            
-            MPI_Sendrecv(&recv_buf[chunk_offset_send + seg_start], seg_count, 
-                         MPI_DOUBLE, right, seg,
-                         temp_buf, seg_count, MPI_DOUBLE, left, seg,
-                         comm, MPI_STATUS_IGNORE);
-            
-            for (ll i = 0; i < seg_count; i++) {
-                recv_buf[chunk_offset_recv + seg_start + i] += temp_buf[i];
-            }
+        MPI_Wait(&send_req, MPI_STATUS_IGNORE);
+        MPI_Wait(&recv_req, MPI_STATUS_IGNORE);
+        
+        // Reduce received chunk into result
+        for (int i = 0; i < chunk_size; i++) {
+            recv_buf[recv_chunk_idx * chunk_size + i] += recv_chunk[i];
         }
     }
     
-    // PHASE 2: ALLGATHER with segmentation
+    // AllGather
+    // Perform size-1 steps
     for (int step = 0; step < size - 1; step++) {
-        int send_chunk = (rank - step - 1 + size) % size;
-        int recv_chunk = (rank - step - 2 + size) % size;
+        int send_chunk_idx = (rank - step + 1 + size) % size;
+        int recv_chunk_idx = (rank - step + size) % size;
+        int send_to = (rank + 1) % size;
+        int recv_from = (rank - 1 + size) % size;
         
-        ll chunk_offset_send = send_chunk * chunk_size;
-        ll chunk_offset_recv = recv_chunk * chunk_size;
+        MPI_Request send_req, recv_req;
+        MPI_Isend(&recv_buf[send_chunk_idx * chunk_size], chunk_size, MPI_DOUBLE,
+                  send_to, 1, comm, &send_req);
+        MPI_Irecv(&recv_buf[recv_chunk_idx * chunk_size], chunk_size, MPI_DOUBLE,
+                  recv_from, 1, comm, &recv_req);
         
-        for (ll seg = 0; seg < num_segments; seg++) {
-            ll seg_start = seg * segment_size;
-            ll seg_count = segment_size;
-            if (seg_start + seg_count > chunk_size) {
-                seg_count = chunk_size - seg_start;
-            }
-            
-            MPI_Sendrecv(&recv_buf[chunk_offset_send + seg_start], seg_count,
-                         MPI_DOUBLE, right, seg,
-                         &recv_buf[chunk_offset_recv + seg_start], seg_count,
-                         MPI_DOUBLE, left, seg,
-                         comm, MPI_STATUS_IGNORE);
-        }
+        MPI_Wait(&send_req, MPI_STATUS_IGNORE);
+        MPI_Wait(&recv_req, MPI_STATUS_IGNORE);
     }
     
-    free(temp_buf);
+    free(recv_chunk);
 }
